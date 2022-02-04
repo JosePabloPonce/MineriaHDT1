@@ -65,11 +65,11 @@ topRevenue = movies.sort_values('revenue', ascending=False)[['title', 'genre1', 
 #se agrega una nueva columna que solo posee el mes de lanzamiento
 movies['Month'] = pd.to_datetime(movies['releaseDate']).dt.strftime('%m')
 #se realiza un diagrama de barras
-# fig = px.bar(movies, x = 'Month', y = 'revenue', title='Fecha de estreno vs Ingresos',)
-# fig.show()
+fig = px.bar(movies, x = 'Month', y = 'revenue', title='Fecha de estreno vs Ingresos',)
+fig.show()
 #se realiza un diagrama de cajas y bigotes
-# fig2 = px.box(movies, x = 'Month', y = 'revenue', title='Fecha de estreno vs Ingresos',)
-# fig2.show()
+fig2 = px.box(movies, x = 'Month', y = 'revenue', title='Fecha de estreno vs Ingresos',)
+fig2.show()
 
 
 # 4.13
@@ -82,16 +82,18 @@ df2 = movies['month_year'].value_counts().rename_axis('month_year').reset_index(
 df2['month'] = df2['month_year'].dt.month
 #se obtiene la mean, min y max de peliculas estrenadas en cada mes
 grouped_single = df2.groupby('month').agg({'counts': ['mean', 'min', 'max']})
-# print(grouped_single)
+#print(grouped_single)
 
 #4.14
 #se realiza un diagrama de dispersion para ver la correlacion
-# fig = px.scatter(movies, x = 'voteCount', y = 'revenue', title='voteCount vs revenue')
-# fig.show()
+fig = px.scatter(movies, x = 'voteCount', y = 'revenue', title='voteCount vs revenue')
+fig.show()
+#print(np.corrcoef(movies['voteCount'], movies['revenue'])[0])
+
 
 #4.15
 #se realiza un split para solo dejar el genero principal
 movies['genres'] = movies['genres'].str.split('|', expand = True,n=1)
 #se obtienen las 100 peliculas mas largas y se hace un conteo por cada genero
 df2= (movies.nlargest(100, 'runtime')['genres'].value_counts())
-# print(df2)
+#print(df2)
