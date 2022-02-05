@@ -12,7 +12,7 @@ movies = pd.read_csv("movies.csv")
 df = pd.read_csv("movies.csv")
 
 #3
-variable = input("Ingrese la variable cuantitativa: ")
+variable = 'voteAvg'
 dist = df[variable]
 # Test de DAgostino
 stat, p = normaltest(dist)
