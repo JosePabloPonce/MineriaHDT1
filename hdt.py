@@ -7,6 +7,42 @@ import plotly.express as px
 # para ver el resultado ya sea del ejercicio o del grafico
 
 movies = pd.read_csv("movies.csv")
+df = pd.read_csv("movies.csv")
+
+#3
+variable = input("Ingrese la variable cuantitativa: ")
+dist = df[variable]
+# Test de DAgostino
+stat, p = normaltest(dist)
+print('Estadisticos=%.3f, p=%.3f' % (stat, p))
+# Interpretación
+alpha = 0.05
+if p > alpha:
+   print('La variable',variable,'parece Gaussiana o Normal (no se rechaza la hipótesis nula H0)')
+else:
+   print('La variable',variable,'no parece Gaussiana o Normal(se rechaza la hipótesis nula H0)')
+
+#Tabla de Frecuencias Cualitativas (Id, original_title, title, releaseDate, homePage, video, director, runtime, genres, productionCompany, productionCompanyCountry, productionCountry, actors, actorsPopularity, actorsCharacter)
+iD = df['id'].value_counts()
+original_title = df['originalTitle'].value_counts()
+title = df['title'].value_counts()
+homePage = df['homePage'].value_counts()
+video = df['video'].value_counts()
+director = df['director'].value_counts()
+runtime = df['runtime'].value_counts()
+genres = df['genres'].value_counts()
+productionCompany = df['productionCompany'].value_counts()
+productionCompanyCountry = df['productionCompanyCountry'].value_counts()
+productionCountry = df['productionCountry'].value_counts()
+actors = df['actors'].value_counts()
+actorsPopularity = df['actorsPopularity'].value_counts()
+actorsCharacter = df['actorsCharacter'].value_counts()
+releaseDate = df['releaseDate'].value_counts()
+
+fig = go.Figure(data=[go.Table(header=dict(values=['Id', 'original_title', 'title', 'releaseDate','homePage', 'video', 'director', 'runtime', 'genres', 'productionCompany', 'productionCompanyCountry', 'productionCountry', 'actors', 'actorsPopularity', 'actorsCharacter']),
+                 cells=dict(values=[iD, original_title, title, releaseDate, homePage, video, director, runtime, genres, productionCompany, productionCompanyCountry, productionCountry, actors, actorsPopularity, actorsCharacter]))
+                     ])
+fig.show()
 
 #4.1 ¿Cuáles son las 10 películas que contaron con más presupuesto?
 a = movies.nlargest(10, 'budget')['title']
@@ -58,8 +94,32 @@ top20genres = pd.value_counts(top_movies.genre1)
 topRevenue = movies.sort_values('revenue', ascending=False)[['title', 'genre1', 'revenue']].head(30)
 # print(topRevenue)
 
+#4.8
+filtrado = df.groupby(['actorsAmount']).mean()
+filtrado2 = filtrado[filtrado['revenue']!= 0]
+df['Date'] = pd.to_datetime(df['releaseDate']).dt.strftime("%Y")
+print(filtrado2.nlargest(10, 'revenue')['revenue'])
+fig = px.bar(filtrado.nlargest(10, 'revenue')['revenue'])
+fig.show()
+print(df[['title', 'Date', 'actorsAmount']].sort_values(by='actorsAmount',ascending=False).head(20))
 
+#4.9
+filtrado2 = df[df['revenue']!= 0]
+print(filtrado2[['revenue', 'castWomenAmount', 'castMenAmount']].sort_values(by='revenue',ascending=False).head(10))
+print(filtrado2[['revenue', 'castWomenAmount', 'castMenAmount']].sort_values(by='revenue',ascending=True).head(10))
+print(filtrado2[['popularity', 'castWomenAmount', 'castMenAmount']].sort_values(by='popularity',ascending=False).head(11))
+print(filtrado2[['popularity', 'castWomenAmount', 'castMenAmount']].sort_values(by='popularity',ascending=True).head(11))
 
+#4.10
+filtrado2 = df[df['revenue']!= 0]
+print(filtrado2[['voteAvg', 'director']].sort_values(by='voteAvg',ascending=False).head(20))
+
+#4.11
+fig = px.scatter(x=df['budget'],y=df['revenue'])
+fig.show()
+print(np.corrcoef(df['budget'], df['revenue']))
+print(df[['title', 'budget', 'revenue']].sort_values(by='budget',ascending=False).head(20))
+print(df[['title', 'budget', 'revenue']].sort_values(by='revenue',ascending=False).head(20))
 
 #4.12
 #se agrega una nueva columna que solo posee el mes de lanzamiento
