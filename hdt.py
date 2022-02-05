@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
+from scipy.stats import normaltest
+import plotly.graph_objects as go
 
 # para probar los ejercicios es necesario descomentarlos 
 # para ver el resultado ya sea del ejercicio o del grafico
